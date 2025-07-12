@@ -5,7 +5,7 @@ export default function Navbar() {
   return (
     <nav
       className="navbar navbar-expand-lg"
-      style={{ backgroundColor: '#28a745' }} // เขียวสด
+      style={{ backgroundColor: '#28a745' }}
     >
       <div className="container">
         <Link className="navbar-brand text-white fw-bold" to="/monitoring">
@@ -34,7 +34,7 @@ export default function Navbar() {
             className="nav-link d-inline text-white"
             to="/"
           >
-            Login
+            Logout
           </Link>
         </div>
       </div>
