@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Login from './pages/Login';
 import Create from './pages/Create';
 import Monitoring from './pages/Monitoring';
@@ -10,8 +10,7 @@ export default function Router() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* ทั้ง / และ /login ชี้ไปหน้า Welcome/Login */}
-        <Route path="/" element={<Login />} />
+        <Route path="/" element={<Navigate to="/login" replace />} />
         <Route path="/login" element={<Login />} />
         <Route path="/create" element={<Create />} />
         <Route path="/monitoring" element={<Layout><Monitoring /></Layout>} />

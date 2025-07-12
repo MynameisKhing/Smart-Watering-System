@@ -10,7 +10,7 @@ export default function Login() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!email || !password) {
-      alert('กรุณากรอก Email และ Password ให้ครบ');
+      alert('กรุณากรอก Email และ Password');
       return;
     }
     navigate('/monitoring');
@@ -37,15 +37,6 @@ export default function Login() {
             value={password}
             onChange={e => setPassword(e.target.value)}
           />
-
-          <div className="login-options">
-            <label className="login-remember">
-              <input type="checkbox" />
-              <span>Remember me</span>
-            </label>
-            <a href="#" className="login-forgot">Forgot password?</a>
-          </div>
-
           <button type="submit" className="login-button">
             Sign In
           </button>

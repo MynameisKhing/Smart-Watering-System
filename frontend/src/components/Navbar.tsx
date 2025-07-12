@@ -1,41 +1,49 @@
 import { Link } from 'react-router-dom';
-import './Navbar.css';
 
 export default function Navbar() {
   return (
-    <nav
-      className="navbar navbar-expand-lg"
-      style={{ backgroundColor: '#28a745' }}
-    >
-      <div className="container">
+    <nav className="navbar navbar-expand-lg navbar-light bg-success">
+      <div className="container-fluid">
         <Link className="navbar-brand text-white fw-bold" to="/monitoring">
-          Smart Watering
+          Smart Watering System
         </Link>
-        <div>
-          <Link
-            className="nav-link d-inline text-white me-3"
-            to="/monitoring"
-          >
-            Monitoring
-          </Link>
-          <Link
-            className="nav-link d-inline text-white me-3"
-            to="/schedule"
-          >
-            Schedule
-          </Link>
-          <Link
-            className="nav-link d-inline text-white me-3"
-            to="/design"
-          >
-            Design
-          </Link>
-          <Link
-            className="nav-link d-inline text-white"
-            to="/"
-          >
-            Logout
-          </Link>
+        <button
+          className="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarContent"
+          aria-controls="navbarContent"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span className="navbar-toggler-icon"></span>
+        </button>
+
+        <div className="collapse navbar-collapse justify-content-between" id="navbarContent">
+          <ul className="navbar-nav mx-auto mb-2 mb-lg-0">
+            <li className="nav-item">
+              <Link className="nav-link text-white fw-bold" to="/monitoring">
+                Monitoring 
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link className="nav-link text-white fw-bold" to="/schedule">
+                Schedule
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link className="nav-link text-white fw-bold" to="/design">
+                Design
+              </Link>
+            </li>
+          </ul>
+          <ul className="navbar-nav">
+            <li className="nav-item">
+              <Link className="nav-link text-white fw-bold" to="/login">
+                Logout
+              </Link>
+            </li>
+          </ul>
         </div>
       </div>
     </nav>
