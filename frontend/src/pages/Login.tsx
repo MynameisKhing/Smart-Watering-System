@@ -1,12 +1,20 @@
 import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 
 export default function Login() {
   const navigate = useNavigate();
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    // ตรวจสอบ username/password ตรงนี้ (mock ตัวอย่าง)
+    if (!username || !password) {
+      alert('กรุณากรอก Username และ Password ให้ครบ');
+      return;
+    }
+
+    // ตรวจสอบ username/password จริงๆ ที่นี่ได้
     const isValid = true;
 
     if (isValid) {
@@ -20,8 +28,18 @@ export default function Login() {
     <div className="container">
       <h1>Login</h1>
       <form onSubmit={handleSubmit}>
-        <input type="text" placeholder="Username" />
-        <input type="password" placeholder="Password" />
+        <input
+          type="text"
+          placeholder="Username"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+        />
+        <input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
         <button type="submit">Login</button>
       </form>
     </div>

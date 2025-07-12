@@ -3,6 +3,7 @@ import Login from './pages/Login';
 import Monitoring from './pages/Monitoring';
 import Schedule from './pages/Schedule';
 import Layout from './components/Layout';
+import Design from './pages/Design';
 
 export default function Router() {
   return (
@@ -24,6 +25,14 @@ export default function Router() {
               <Schedule />
             </Layout>
           }
+        />
+        <Route
+          path="/design"
+          element={
+            <Layout>
+              <Design />
+            </Layout>
+        }
         />
       </Routes>
     </BrowserRouter>

@@ -9,6 +9,8 @@ export default function Navbar() {
           <Link to="/monitoring">Monitoring</Link>
           {' | '}
           <Link to="/schedule">Schedule</Link>
+          {' | '}
+          <Link to="/design">Design</Link>
         </div>
         <div className="navbar__right">
           <Link to="/">Login</Link>
