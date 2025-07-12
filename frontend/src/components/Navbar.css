@@ -1,0 +1,23 @@
+.navbar {
+  background-color: #4caf50;
+  padding: 1rem;
+  color: white;
+}
+
+.navbar__content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.navbar__left a,
+.navbar__right a {
+  color: white;
+  text-decoration: none;
+  margin: 0 0.5rem;
+}
+
+.navbar__left a:hover,
+.navbar__right a:hover {
+  text-decoration: underline;
+}
