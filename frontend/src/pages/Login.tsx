@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import './Login.css';
 
 export default function Login() {
@@ -17,8 +17,8 @@ export default function Login() {
   };
 
   return (
-    <div className="login-page">              {/* ใช้ flex centering */}
-      <div className="login-container">       {/* container เดิม */}
+    <div className="login-page">
+      <div className="login-container">
         <h1 className="login-title">Welcome</h1>
         <p className="login-subtitle">Sign in to your account</p>
 
@@ -53,7 +53,7 @@ export default function Login() {
 
         <div className="login-footer">
           <span>Don't have an account?</span>
-          <a href="#" className="login-link">Create Account</a>
+          <Link to="/create" className="login-link">Create Account</Link>
         </div>
       </div>
     </div>

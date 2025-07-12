@@ -1,102 +1,60 @@
-// src/pages/Schedule.tsx
-import { useState, useEffect } from "react";
+import React, { useState } from "react";
+import "./schedule.css";
 
 export default function Schedule() {
   const [hour, setHour] = useState("00");
   const [minute, setMinute] = useState("00");
-  const [schedule, setSchedule] = useState<string[]>([]);
+  const [scheduleList, setScheduleList] = useState<string[]>([]);
 
-  // โหลดตารางเวลาเมื่อเริ่มต้น
-  useEffect(() => {
-    const saved = localStorage.getItem("schedule");
-    if (saved) setSchedule(JSON.parse(saved));
-  }, []);
-
-  // บันทึกตารางเวลาใน localStorage เมื่อเปลี่ยนแปลง
-  useEffect(() => {
-    localStorage.setItem("schedule", JSON.stringify(schedule));
-  }, [schedule]);
-
-  const handleAdd = (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleAdd = () => {
     const time = `${hour}:${minute}`;
-
-    if (schedule.includes(time)) {
-      alert("เวลานี้ถูกตั้งแล้ว");
-      return;
+    if (!scheduleList.includes(time)) {
+      setScheduleList([...scheduleList, time]);
     }
-
-    const updated = [...schedule, time].sort();
-    setSchedule(updated);
   };
-
-  const handleDelete = (t: string) => {
-    setSchedule(schedule.filter((s) => s !== t));
-  };
-
-  // ชุดตัวเลือก ชั่วโมงและนาที (24h format)
-  const hours = Array.from({ length: 24 }, (_, i) =>
-    i.toString().padStart(2, "0")
-  );
-  const minutes = Array.from({ length: 60 }, (_, i) =>
-    i.toString().padStart(2, "0")
-  );
 
   return (
-    <div>
-      <h1>Schedule</h1>
-      <form onSubmit={handleAdd}>
-        <div className="row g-2 mb-3">
-          <div className="col-auto">
-            <select
-              className="form-select"
-              value={hour}
-              onChange={(e) => setHour(e.target.value)}
-            >
-              {hours.map((h) => (
-                <option key={h} value={h}>
-                  {h}
-                </option>
+    <main className="container">
+      <section>
+        <h2 className="section-title">Schedule</h2>
+        <div className="schedule-form">
+          <select value={hour} onChange={(e) => setHour(e.target.value)}>
+            {[...Array(24)].map((_, i) => {
+              const val = i.toString().padStart(2, "0");
+              return <option key={val} value={val}>{val}</option>;
+            })}
+          </select>
+
+          <select value={minute} onChange={(e) => setMinute(e.target.value)}>
+            {[...Array(60)].map((_, i) => {
+              const val = i.toString().padStart(2, "0");
+              return <option key={val} value={val}>{val}</option>;
+            })}
+          </select>
+
+          <button onClick={handleAdd}>+ Add</button>
+        </div>
+
+        <div className="schedule-list">
+          <h3>Current Schedule</h3>
+          {scheduleList.length === 0 ? (
+            <div className="schedule-empty">No watering times scheduled yet.</div>
+          ) : (
+            <ul>
+              {scheduleList.map((time, idx) => (
+                <li key={idx}>{time}</li>
               ))}
-            </select>
-          </div>
-          <div className="col-auto">
-            <select
-              className="form-select"
-              value={minute}
-              onChange={(e) => setMinute(e.target.value)}
-            >
-              {minutes.map((m) => (
-                <option key={m} value={m}>
-                  {m}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div className="col-auto">
-            <button type="submit" className="btn btn-success">
-              Add
-            </button>
+            </ul>
+          )}
+        </div>
+
+        <div className="device-status">
+          <h3>Device Status</h3>
+          <div className="status-ok">
+            ✅ Your watering device is connected and working properly
           </div>
         </div>
-      </form>
-
-      <ul className="list-group">
-        {schedule.map((t) => (
-          <li
-            key={t}
-            className="list-group-item d-flex justify-content-between align-items-center"
-          >
-            <span>{t}</span>
-            <button
-              className="btn btn-sm btn-danger"
-              onClick={() => handleDelete(t)}
-            >
-              Delete
-            </button>
-          </li>
-        ))}
-      </ul>
-    </div>
+      </section>
+    </main>
   );
 }

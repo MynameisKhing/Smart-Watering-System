@@ -1,0 +1,90 @@
+#webcrumbs {
+  font-family: Arial, sans-serif;
+  color: #333;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #22c55e;
+  color: white;
+  padding: 0.75rem 1.5rem;
+}
+
+.header-left {
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+.header-right a {
+  margin-left: 1rem;
+  color: white;
+  text-decoration: none;
+}
+
+.header-right a:hover {
+  text-decoration: underline;
+}
+
+.container {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+.section-title {
+  font-size: 1.25rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.schedule-form {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.schedule-form select {
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.schedule-form button {
+  background-color: #22c55e;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.schedule-form button:hover {
+  background-color: #16a34a;
+}
+
+.schedule-list {
+  margin-top: 1rem;
+}
+
+.schedule-empty {
+  padding: 0.75rem;
+  background-color: #f1f5f9;
+  border: 1px solid #e2e8f0;
+  border-radius: 4px;
+  font-style: italic;
+  color: #64748b;
+}
+
+.device-status {
+  margin-top: 1.5rem;
+}
+
+.status-ok {
+  background-color: #dcfce7;
+  color: #166534;
+  padding: 0.75rem;
+  border-radius: 6px;
+  border: 1px solid #bbf7d0;
+}
