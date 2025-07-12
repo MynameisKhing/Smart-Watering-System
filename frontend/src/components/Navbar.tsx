@@ -1,21 +1,42 @@
 import { Link } from 'react-router-dom';
-import './Navbar.css'; // optional, เผื่อจัด layout ด้วย CSS
 
 export default function Navbar() {
   return (
-    <header className="navbar">
-      <nav className="navbar__content">
-        <div className="navbar__left">
-          <Link to="/monitoring">Monitoring</Link>
-          {' | '}
-          <Link to="/schedule">Schedule</Link>
-          {' | '}
-          <Link to="/design">Design</Link>
+    <nav
+      className="navbar navbar-expand-lg"
+      style={{ backgroundColor: '#28a745' }} // เขียวสด
+    >
+      <div className="container">
+        <Link className="navbar-brand text-white fw-bold" to="/monitoring">
+          Smart Watering
+        </Link>
+        <div>
+          <Link
+            className="nav-link d-inline text-white me-3"
+            to="/monitoring"
+          >
+            Monitoring
+          </Link>
+          <Link
+            className="nav-link d-inline text-white me-3"
+            to="/schedule"
+          >
+            Schedule
+          </Link>
+          <Link
+            className="nav-link d-inline text-white me-3"
+            to="/design"
+          >
+            Design
+          </Link>
+          <Link
+            className="nav-link d-inline text-white"
+            to="/"
+          >
+            Login
+          </Link>
         </div>
-        <div className="navbar__right">
-          <Link to="/">Login</Link>
-        </div>
-      </nav>
-    </header>
+      </div>
+    </nav>
   );
 }

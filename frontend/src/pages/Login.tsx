@@ -14,33 +14,34 @@ export default function Login() {
       return;
     }
 
-    // ตรวจสอบ username/password จริงๆ ที่นี่ได้
-    const isValid = true;
-
-    if (isValid) {
-      navigate('/monitoring');
-    } else {
-      alert('Invalid username or password');
-    }
+    navigate('/monitoring');
   };
 
   return (
-    <div className="container">
-      <h1>Login</h1>
+    <div className="container mt-5">
+      <h1 className="mb-4">Login</h1>
       <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          placeholder="Username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <button type="submit">Login</button>
+        <div className="mb-3">
+          <input
+            type="text"
+            placeholder="Username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            className="form-control"
+          />
+        </div>
+        <div className="mb-3">
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="form-control"
+          />
+        </div>
+        <button type="submit" className="btn btn-success w-100">
+          Login
+        </button>
       </form>
     </div>
   );
