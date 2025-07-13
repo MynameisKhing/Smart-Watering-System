@@ -36,8 +36,8 @@ export default function Navbar() {
               </Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link fw-bold" to="/design">
-                Design
+              <Link className="nav-link fw-bold" to="/board-management">
+                Manage
               </Link>
             </li>
           </ul>

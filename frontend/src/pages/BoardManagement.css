@@ -1,0 +1,72 @@
+.board-management {
+  padding: 1rem;
+}
+
+.board-management h1 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.board-management table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1rem;
+}
+
+.board-management th,
+.board-management td {
+  border: 1px solid #ddd;
+  padding: 0.5rem;
+}
+
+.board-management input {
+  width: 100%;
+  padding: 0.25rem;
+}
+
+.board-management select {
+  padding: 0.25rem;
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  color: white;
+  font-size: 0.875rem;
+  text-align: center;
+}
+
+.status-badge.online {
+  background-color: #22c55e;
+}
+
+.status-badge.offline {
+  background-color: #ef4444;
+}
+
+.btn-add {
+  background-color: #22c55e;
+  color: white;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 0.25rem;
+  cursor: pointer;
+}
+
+.btn-add:hover {
+  background-color: #16a34a;
+}
+
+.btn-delete {
+  background-color: #ef4444;
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border: none;
+  border-radius: 0.25rem;
+  cursor: pointer;
+}
+
+.btn-delete:hover {
+  background-color: #dc2626;
+}

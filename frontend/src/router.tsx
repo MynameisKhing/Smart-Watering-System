@@ -3,7 +3,7 @@ import Login from './pages/Login';
 import Create from './pages/Create';
 import Monitoring from './pages/Monitoring';
 import Schedule from './pages/Schedule';
-import Design from './pages/Design';
+import BoardManagement from './pages/BoardManagement';
 import Layout from './components/Layout';
 
 export default function Router() {
@@ -15,7 +15,7 @@ export default function Router() {
         <Route path="/create" element={<Create />} />
         <Route path="/monitoring" element={<Layout><Monitoring /></Layout>} />
         <Route path="/schedule" element={<Layout><Schedule /></Layout>} />
-        <Route path="/design" element={<Layout><Design /></Layout>} />
+        <Route path="/board-management" element={<Layout><BoardManagement /></Layout>} />
       </Routes>
     </BrowserRouter>
   );
