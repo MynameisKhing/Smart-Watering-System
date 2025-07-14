@@ -1,75 +1,114 @@
-import './Monitoring.css';
+import { useState } from "react";
+import {
+  LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer
+} from "recharts";
+import "./Monitoring.css";
 
 export default function Monitoring() {
+  // mock ข้อมูลกราฟน้ำ
+  const waterUsageData = [
+    { time: "08:00", value: 10 },
+    { time: "09:00", value: 20 },
+    { time: "10:00", value: 30 },
+    { time: "11:00", value: 25 },
+    { time: "12:00", value: 40 },
+  ];
+
+  const mockBoards = [
+    { id: "Board 1", moisture: "45%" },
+    { id: "Board 2", moisture: "50%" },
+    { id: "Board 3", moisture: "40%" },
+  ];
+
+  const [valves, setValves] = useState([
+    { id: "Valve 1", status: "ON" },
+    { id: "Valve 2", status: "OFF" },
+    { id: "Valve 3", status: "OFF" },
+  ]);
+
+  const toggleValve = (index: number) => {
+    setValves(valves.map((valve, idx) => {
+      if (idx === index) {
+        return {
+          ...valve,
+          status: valve.status === "ON" ? "OFF" : "ON"
+        };
+      }
+      return valve;
+    }));
+  };
+
   return (
     <div id="webcrumbs">
-      <div className="w-[1200px] min-h-screen bg-white p-8">
-        <div className="w-full">
-          <div className="mb-8">
-            <h1 className="text-2xl font-light">Monitoring</h1>
-            <p className="text-gray-500 text-sm">Current System Status</p>
-          </div>
+      <div className="monitoring-container">
+        <h1>Monitoring Dashboard</h1>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-            <div className="bg-gray-50 p-6 rounded">
-              <div className="flex justify-between items-center mb-4">
-                <h3 className="font-medium">Soil Moisture</h3>
-                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                  45%
-                </span>
-              </div>
-              <p className="text-sm text-gray-500">Current soil moisture level</p>
-            </div>
-
-            <div className="bg-gray-50 p-6 rounded">
-              <div className="flex justify-between items-center mb-4">
-                <h3 className="font-medium">Pump Status</h3>
-                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
-                  OFF
-                </span>
-              </div>
-              <p className="text-sm text-gray-500">Water pump current state</p>
-            </div>
-
-            <div className="bg-gray-50 p-6 rounded">
-              <div className="flex justify-between items-center mb-4">
-                <h3 className="font-medium">Manual Control</h3>
-                <button className="bg-primary-500 px-6 py-3 text-white rounded hover:text-primary-700 transition-colors">
-                  Water Now
-                </button>
-              </div>
-              <p className="text-sm text-gray-500">Manually activate watering</p>
-            </div>
-          </div>
-
-          <div className="bg-gray-50 p-6 rounded">
-            <h2 className="text-xl font-light mb-6">Recent Events</h2>
-            <div className="space-y-4">
-              <div className="flex items-start">
-                <span className="material-symbols-outlined text-green-500 mr-3">check_circle</span>
-                <div>
-                  <p className="text-sm">Scheduled watering completed</p>
-                  <p className="text-xs text-gray-500">Today, 06:00</p>
-                </div>
-              </div>
-              <div className="flex items-start">
-                <span className="material-symbols-outlined text-yellow-500 mr-3">warning</span>
-                <div>
-                  <p className="text-sm">Soil moisture below threshold</p>
-                  <p className="text-xs text-gray-500">Yesterday, 18:00</p>
-                </div>
-              </div>
-              <div className="flex items-start">
-                <span className="material-symbols-outlined text-green-500 mr-3">check_circle</span>
-                <div>
-                  <p className="text-sm">Manual watering triggered</p>
-                  <p className="text-xs text-gray-500">Yesterday, 12:00</p>
-                </div>
-              </div>
-            </div>
-          </div>
-
+        {/* กราฟ */}
+        <div className="graph-section">
+          <h2>Water Usage</h2>
+          <ResponsiveContainer width="100%" height={300}>
+            <LineChart data={waterUsageData}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="time" />
+              <YAxis />
+              <Tooltip />
+              <Line type="monotone" dataKey="value" stroke="#22c55e" />
+            </LineChart>
+          </ResponsiveContainer>
         </div>
+
+        {/* ความชื้น */}
+        <div className="moisture-section">
+          <h2>Soil Moisture by Board</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>Board</th>
+                <th>Moisture</th>
+              </tr>
+            </thead>
+            <tbody>
+              {mockBoards.map(board => (
+                <tr key={board.id}>
+                  <td>{board.id}</td>
+                  <td>{board.moisture}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        {/* วาล์ว */}
+        <div className="valve-section">
+          <h2>Valve Control</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>Valve</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {valves.map((valve, idx) => (
+                <tr key={valve.id}>
+                  <td>{valve.id}</td>
+                  <td>
+                    <span className={`status ${valve.status.toLowerCase()}`}>
+                      {valve.status}
+                    </span>
+                  </td>
+                  <td>
+                    <button onClick={() => toggleValve(idx)}>
+                      Toggle
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
       </div>
     </div>
   );
