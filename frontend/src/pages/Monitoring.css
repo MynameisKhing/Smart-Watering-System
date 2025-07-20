@@ -1,35 +1,93 @@
 .monitoring-container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 1rem;
+  padding: 2rem 1rem;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
-h1 {
-  font-size: 1.5rem;
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding: 1rem;
+  background: linear-gradient(90deg, #28a745, #218838);
+  border-radius: 12px;
+  color: #ffffff;
+}
+
+.dashboard-header h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.dashboard-time {
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.monitoring-grid {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
+
+.card {
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 1.5rem;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
   margin-bottom: 1rem;
 }
 
-h2 {
-  font-size: 1.25rem;
-  margin: 1rem 0 0.5rem;
+.card-header h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #1f2937;
+  margin: 0;
+}
+
+.card-header i {
+  margin-left: 0.5rem;
+  color: #3b82f6;
 }
 
 table {
   width: 100%;
   border-collapse: collapse;
-  margin-bottom: 1rem;
+  margin-bottom: 0;
 }
 
 th, td {
-  border: 1px solid #ddd;
-  padding: 0.5rem;
+  border: 1px solid #e5e7eb;
+  padding: 0.75rem;
   text-align: center;
+  font-size: 0.9rem;
+}
+
+th {
+  background-color: #f1f5f9;
+  font-weight: 600;
+  color: #374151;
 }
 
 .status {
   padding: 0.25rem 0.5rem;
   border-radius: 0.25rem;
   color: #fff;
+  font-weight: 500;
 }
 
 .status.on {
@@ -41,14 +99,90 @@ th, td {
 }
 
 button {
-  padding: 0.25rem 0.75rem;
+  padding: 0.5rem 1rem;
   border: none;
-  border-radius: 0.25rem;
-  background-color: #3b82f6;
+  border-radius: 6px;
+  background: linear-gradient(90deg, #3b82f6, #2563eb);
   color: white;
+  font-size: 0.9rem;
+  font-weight: 500;
   cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
 }
 
 button:hover {
-  background-color: #2563eb;
+  background: linear-gradient(90deg, #2563eb, #1e40af);
+  transform: translateY(-2px);
+}
+
+button:active {
+  transform: translateY(0);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .monitoring-container {
+    padding: 1rem;
+  }
+
+  .dashboard-header {
+    flex-direction: column;
+    text-align: center;
+    padding: 0.75rem;
+  }
+
+  .dashboard-header h1 {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .dashboard-time {
+    font-size: 0.9rem;
+  }
+
+  .monitoring-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .card {
+    padding: 1rem;
+  }
+
+  .card-header h2 {
+    font-size: 1.2rem;
+  }
+
+  th, td {
+    font-size: 0.8rem;
+    padding: 0.5rem;
+  }
+
+  button {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .dashboard-header h1 {
+    font-size: 1.25rem;
+  }
+
+  .dashboard-time {
+    font-size: 0.8rem;
+  }
+
+  .card-header h2 {
+    font-size: 1rem;
+  }
+
+  th, td {
+    font-size: 0.75rem;
+    padding: 0.4rem;
+  }
+
+  button {
+    padding: 0.3rem 0.6rem;
+    font-size: 0.75rem;
+  }
 }

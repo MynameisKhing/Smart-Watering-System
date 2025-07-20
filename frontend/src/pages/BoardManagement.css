@@ -1,72 +1,384 @@
 .board-management {
-  padding: 1rem;
+  padding: 1.5rem;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background-color: #f9fafb;
+  border-radius: 8px;
+  max-width: 1200px;
+  margin: 2rem auto;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .board-management h1 {
-  font-size: 1.5rem;
-  margin-bottom: 1rem;
+  font-size: 1.75rem;
+  font-weight: 600;
+  color: #1f2937;
+  margin-bottom: 1.5rem;
+  text-align: center;
 }
 
 .board-management table {
   width: 100%;
-  border-collapse: collapse;
-  margin-bottom: 1rem;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin-bottom: 1.5rem;
+  background-color: #ffffff;
+  border-radius: 8px;
+  overflow: hidden;
 }
 
 .board-management th,
 .board-management td {
-  border: 1px solid #ddd;
-  padding: 0.5rem;
+  padding: 0.75rem 1rem;
+  text-align: left;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.board-management th {
+  background-color: #f1f5f9;
+  font-weight: 600;
+  color: #1f2937;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.board-management tr:hover {
+  background-color: #f3f4f6;
+  transition: background-color 0.2s ease;
 }
 
 .board-management input {
   width: 100%;
-  padding: 0.25rem;
+  padding: 0.5rem;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  color: #1f2937;
+  background-color: #ffffff;
+  transition: border-color 0.2s ease;
+}
+
+.board-management input:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 }
 
 .board-management select {
-  padding: 0.25rem;
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  color: #1f2937;
+  background-color: #ffffff;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%231f2937' stroke-width='2'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.5rem center;
+  background-size: 1.5em;
+}
+
+.board-management select:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 }
 
 .status-badge {
-  display: inline-block;
-  padding: 0.25rem 0.5rem;
-  border-radius: 0.25rem;
-  color: white;
-  font-size: 0.875rem;
-  text-align: center;
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
 .status-badge.online {
   background-color: #22c55e;
+  color: #ffffff;
 }
 
 .status-badge.offline {
   background-color: #ef4444;
+  color: #ffffff;
 }
 
 .btn-add {
-  background-color: #22c55e;
-  color: white;
+  background-color: #3b82f6;
+  color: #ffffff;
   padding: 0.5rem 1rem;
   border: none;
-  border-radius: 0.25rem;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 500;
   cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .btn-add:hover {
-  background-color: #16a34a;
+  background-color: #2563eb;
+  transform: translateY(-1px);
+}
+
+.btn-add:active {
+  transform: translateY(0);
 }
 
 .btn-delete {
   background-color: #ef4444;
-  color: white;
-  padding: 0.25rem 0.75rem;
+  color: #ffffff;
+  padding: 0.5rem 1rem;
   border: none;
-  border-radius: 0.25rem;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 500;
   cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .btn-delete:hover {
   background-color: #dc2626;
+  transform: translateY(-1px);
+}
+
+.btn-delete:active {
+  transform: translateY(0);
+}
+
+.schedule-row {
+  background: #ffffff;
+  transition: max-height 0.3s ease;
+}
+
+.schedule-form {
+  padding: 1.5rem;
+  background: #ffffff;
+  border-radius: 6px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  width: 100%;
+}
+
+.schedule-title {
+  font-size: 1.25rem;
+  font-weight: 500;
+  color: #1f2937;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.schedule-form-group {
+  display: flex;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+  align-items: center;
+  justify-content: center;
+}
+
+.schedule-form-group label {
+  display: flex;
+  align-items: center;
+  font-size: 0.875rem;
+  color: #1f2937;
+  gap: 0.5rem;
+}
+
+.schedule-form-group input[type="checkbox"] {
+  margin-right: 0.5rem;
+}
+
+.schedule-form-group input[type="time"],
+.schedule-form-group input[type="number"] {
+  background: #ffffff;
+  color: #1f2937;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  padding: 0.5rem;
+  font-size: 0.875rem;
+  width: 120px;
+}
+
+.schedule-form-group input:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.schedule-days-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+
+.day-checkbox {
+  display: flex;
+  align-items: center;
+  font-size: 0.875rem;
+  color: #1f2937;
+}
+
+.day-checkbox input[type="checkbox"] {
+  margin-right: 0.5rem;
+}
+
+.schedule-form-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+.btn-save,
+.btn-cancel {
+  padding: 0.5rem 1.5rem;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.btn-save {
+  background-color: #3b82f6;
+  color: #ffffff;
+}
+
+.btn-save:hover {
+  background-color: #2563eb;
+  transform: translateY(-1px);
+}
+
+.btn-save:active {
+  transform: translateY(0);
+}
+
+.btn-cancel {
+  background-color: #6b7280;
+  color: #ffffff;
+}
+
+.btn-cancel:hover {
+  background-color: #4b5563;
+  transform: translateY(-1px);
+}
+
+.btn-cancel:active {
+  transform: translateY(0);
+}
+
+/* Responsive Design */
+@media (max-width: 576px) {
+  .board-management {
+    padding: 1rem;
+    margin: 1rem auto;
+  }
+
+  .board-management h1 {
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+  }
+
+  .board-management table {
+    display: block;
+    overflow-x: auto;
+  }
+
+  .board-management th,
+  .board-management td {
+    font-size: 0.75rem;
+    padding: 0.5rem;
+    min-width: 100px; /* Ensure minimum width for readability */
+  }
+
+  .schedule-form {
+    padding: 1rem;
+  }
+
+  .schedule-title {
+    font-size: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .schedule-form-group {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .schedule-form-group label {
+    width: 100%;
+  }
+
+  .schedule-form-group input[type="time"],
+  .schedule-form-group input[type="number"] {
+    width: 100%;
+  }
+
+  .schedule-days-list {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .btn-add,
+  .btn-delete,
+  .btn-save,
+  .btn-cancel {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.75rem;
+  }
+}
+
+@media (min-width: 577px) and (max-width: 768px) {
+  .board-management {
+    padding: 1.25rem;
+  }
+
+  .board-management h1 {
+    font-size: 1.5rem;
+  }
+
+  .board-management th,
+  .board-management td {
+    font-size: 0.8rem;
+    padding: 0.6rem;
+  }
+
+  .schedule-form {
+    padding: 1.25rem;
+  }
+
+  .schedule-title {
+    font-size: 1.1rem;
+  }
+
+  .schedule-form-group {
+    flex-wrap: wrap;
+  }
+
+  .schedule-days-list {
+    gap: 0.9rem;
+  }
+
+  .btn-add,
+  .btn-delete,
+  .btn-save,
+  .btn-cancel {
+    padding: 0.45rem 1rem;
+    font-size: 0.8rem;
+  }
+}
+
+@media (min-width: 769px) {
+  .board-management table {
+    display: table;
+  }
 }

@@ -2,7 +2,12 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import './Login.css';
 
-export default function Login() {
+// Define props interface for Login component
+interface LoginProps {
+  onLogin?: () => void;
+}
+
+export default function Login({ onLogin }: LoginProps) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
@@ -13,7 +18,13 @@ export default function Login() {
       alert('กรุณากรอก Email และ Password');
       return;
     }
-    navigate('/monitoring');
+    if (email === 'user@example.com' && password === 'password123') {
+      console.log('Login successful, calling onLogin if available');
+      if (onLogin) onLogin();
+      navigate('/monitoring');
+    } else {
+      alert('Invalid credentials');
+    }
   };
 
   return (

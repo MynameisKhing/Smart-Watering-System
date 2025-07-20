@@ -1,11 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer
 } from "recharts";
 import "./Monitoring.css";
 
 export default function Monitoring() {
-  // mock ข้อมูลกราฟน้ำ
   const waterUsageData = [
     { time: "08:00", value: 10 },
     { time: "09:00", value: 20 },
@@ -26,6 +25,15 @@ export default function Monitoring() {
     { id: "Valve 3", status: "OFF" },
   ]);
 
+  const [currentTime, setCurrentTime] = useState(new Date());
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
+
   const toggleValve = (index: number) => {
     setValves(valves.map((valve, idx) => {
       if (idx === index) {
@@ -39,27 +47,33 @@ export default function Monitoring() {
   };
 
   return (
-    <div id="webcrumbs">
-      <div className="monitoring-container">
+    <div className="monitoring-container">
+      <div className="dashboard-header">
         <h1>Monitoring Dashboard</h1>
-
-        {/* กราฟ */}
-        <div className="graph-section">
-          <h2>Water Usage</h2>
+        <span className="dashboard-time">
+          {currentTime.toLocaleTimeString('th-TH', { timeZone: 'Asia/Bangkok' })} +07, {currentTime.toLocaleDateString('th-TH', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
+        </span>
+      </div>
+      <div className="monitoring-grid">
+        <div className="card graph-section">
+          <div className="card-header">
+            <h2>Water Usage <i className="fas fa-chart-line"></i></h2>
+          </div>
           <ResponsiveContainer width="100%" height={300}>
             <LineChart data={waterUsageData}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="time" />
-              <YAxis />
-              <Tooltip />
-              <Line type="monotone" dataKey="value" stroke="#22c55e" />
+              <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+              <XAxis dataKey="time" stroke="#6b7280" />
+              <YAxis stroke="#6b7280" />
+              <Tooltip contentStyle={{ background: '#ffffff', borderRadius: '6px', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }} />
+              <Line type="monotone" dataKey="value" stroke="#22c55e" strokeWidth={2} activeDot={{ r: 8 }} />
             </LineChart>
           </ResponsiveContainer>
         </div>
 
-        {/* ความชื้น */}
-        <div className="moisture-section">
-          <h2>Soil Moisture by Board</h2>
+        <div className="card moisture-section">
+          <div className="card-header">
+            <h2>Soil Moisture <i className="fas fa-leaf"></i></h2>
+          </div>
           <table>
             <thead>
               <tr>
@@ -78,9 +92,10 @@ export default function Monitoring() {
           </table>
         </div>
 
-        {/* วาล์ว */}
-        <div className="valve-section">
-          <h2>Valve Control</h2>
+        <div className="card valve-section">
+          <div className="card-header">
+            <h2>Valve Control <i className="fas fa-cog"></i></h2>
+          </div>
           <table>
             <thead>
               <tr>
@@ -108,7 +123,6 @@ export default function Monitoring() {
             </tbody>
           </table>
         </div>
-
       </div>
     </div>
   );

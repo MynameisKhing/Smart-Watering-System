@@ -1,97 +1,68 @@
-import React, { useState } from "react";
-import "./schedule.css";
+import React, { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import "./Schedule.css";
+
+const DAYS = ["จันทร์", "อังคาร", "พุธ", "พฤหัสบดี", "ศุกร์", "เสาร์", "อาทิตย์"];
 
 export default function Schedule() {
-  const [hour, setHour] = useState("00");
-  const [minute, setMinute] = useState("00");
-  const [scheduleList, setScheduleList] = useState<string[]>([]);
-  const [editingIdx, setEditingIdx] = useState<number | null>(null);
+  const { boardId } = useParams<{ boardId: string }>();
+  const navigate = useNavigate();
 
-  const handleAdd = () => {
-    const time = `${hour}:${minute}`;
-    if (!scheduleList.includes(time)) {
-      setScheduleList([...scheduleList, time]);
-    }
+  const [time, setTime] = useState("22:00");
+  const [duration, setDuration] = useState(15);
+  const [days, setDays] = useState<string[]>([]);
+
+  useEffect(() => {
+    // ดึงข้อมูลบอร์ดจาก backend ตาม boardId แล้วเติมค่าเริ่มต้น
+  }, [boardId]);
+
+  const toggleDay = (day: string) => {
+    setDays(prev => prev.includes(day) ? prev.filter(d => d !== day) : [...prev, day]);
   };
 
-  const handleDelete = (idx: number) => {
-    setScheduleList(scheduleList.filter((_, i) => i !== idx));
-    if (editingIdx === idx) setEditingIdx(null);
-  };
-
-  const handleEdit = (idx: number) => {
-    const [h, m] = scheduleList[idx].split(":");
-    setHour(h);
-    setMinute(m);
-    setEditingIdx(idx);
-  };
-
-  const handleSaveEdit = () => {
-    if (editingIdx !== null) {
-      const updated = [...scheduleList];
-      updated[editingIdx] = `${hour}:${minute}`;
-      setScheduleList(updated);
-      setEditingIdx(null);
-    }
+  const handleSave = () => {
+    // ส่งค่าไป backend แล้วกลับไปหน้า board manager
+    navigate("/");
   };
 
   return (
-    <main className="container">
-      <section>
-        <h2 className="section-title">Schedule</h2>
+    <div className="container">
+      <h2 className="section-title">ตั้งเวลารดน้ำสำหรับ {boardId}</h2>
 
-        <div className="schedule-form">
-          <select value={hour} onChange={(e) => setHour(e.target.value)}>
-            {[...Array(24)].map((_, i) => {
-              const val = i.toString().padStart(2, "0");
-              return <option key={val} value={val}>{val}</option>;
-            })}
-          </select>
+      <div className="schedule-form">
+        <label>
+          เวลา:
+          <input type="time" value={time} onChange={e => setTime(e.target.value)} />
+        </label>
+        <label>
+          ระยะเวลา (นาที):
+          <input
+            type="number"
+            min={1}
+            value={duration}
+            onChange={e => setDuration(Number(e.target.value))}
+          />
+        </label>
+      </div>
 
-          <select value={minute} onChange={(e) => setMinute(e.target.value)}>
-            {[...Array(60)].map((_, i) => {
-              const val = i.toString().padStart(2, "0");
-              return <option key={val} value={val}>{val}</option>;
-            })}
-          </select>
+      <div className="schedule-form">
+        <span>เลือกวัน:</span>
+        {DAYS.map(day => (
+          <label key={day}>
+            <input
+              type="checkbox"
+              checked={days.includes(day)}
+              onChange={() => toggleDay(day)}
+            />
+            {day}
+          </label>
+        ))}
+      </div>
 
-          {editingIdx === null ? (
-            <button onClick={handleAdd}>+ Add</button>
-          ) : (
-            <button onClick={handleSaveEdit}>Save</button>
-          )}
-        </div>
-
-        <div className="schedule-list">
-          <h3>Current Schedule</h3>
-          {scheduleList.length === 0 ? (
-            <div className="schedule-empty">No watering times scheduled yet.</div>
-          ) : (
-            <div className="schedule-badges">
-              {scheduleList.map((time, idx) => (
-                <div key={idx} className="schedule-badge">
-                  <span>{time}</span>
-                  <div className="schedule-actions">
-                    <button onClick={() => handleEdit(idx)} className="btn-edit">
-                      Edit
-                    </button>
-                    <button onClick={() => handleDelete(idx)} className="btn-delete">
-                      Delete
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-
-        <div className="device-status">
-          <h3>Device Status</h3>
-          <div className="status-ok">
-            Your watering device is connected and working properly
-          </div>
-        </div>
-      </section>
-    </main>
+      <div className="schedule-form">
+        <button onClick={handleSave}>บันทึก</button>
+        <button onClick={() => navigate("/")}>ยกเลิก</button>
+      </div>
+    </div>
   );
 }
