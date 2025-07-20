@@ -2,8 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import './Login.css';
 
-// Define props interface for Login component
-interface LoginProps {
+export interface LoginProps {
   onLogin?: () => void;
 }
 
@@ -19,7 +18,6 @@ export default function Login({ onLogin }: LoginProps) {
       return;
     }
     if (email === 'user@example.com' && password === 'password123') {
-      console.log('Login successful, calling onLogin if available');
       if (onLogin) onLogin();
       navigate('/monitoring');
     } else {

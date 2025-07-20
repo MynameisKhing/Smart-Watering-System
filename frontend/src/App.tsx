@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import Layout from './components/Layout';
 import BoardManagement from './pages/BoardManagement';
@@ -6,49 +6,46 @@ import Monitoring from './pages/Monitoring';
 import Login from './pages/Login';
 import Create from './pages/Create';
 
-type AuthComponentProps = {
-  onLogin?: () => void;
+const ProtectedRoute = ({
+  children,
+  isAuthenticated,
+  onLogout,
+}: {
+  children: React.ReactElement;
+  isAuthenticated: boolean;
+  onLogout: () => void;
+}) => {
+  if (!isAuthenticated) {
+    return <Navigate to="/login" replace />;
+  }
+
+  return <Layout onLogout={onLogout}>{children}</Layout>;
 };
 
-const ProtectedRoute = ({ children }: { children: React.ReactElement<AuthComponentProps> }) => {
-  const [isAuthenticated, setIsAuthenticated] = React.useState(
+function App() {
+  const [isAuthenticated, setIsAuthenticated] = useState(
     () => localStorage.getItem('isAuthenticated') === 'true'
   );
 
   const handleLogin = () => {
-    console.log('handleLogin called, setting isAuthenticated to true');
     setIsAuthenticated(true);
     localStorage.setItem('isAuthenticated', 'true');
   };
 
   const handleLogout = () => {
-    console.log('handleLogout called, setting isAuthenticated to false');
     setIsAuthenticated(false);
     localStorage.setItem('isAuthenticated', 'false');
   };
 
-  if (!isAuthenticated) {
-    console.log('Not authenticated, redirecting to /login');
-    return <Navigate to="/login" replace />;
-  }
-
-  return (
-    <Layout onLogout={handleLogout}>
-      {React.cloneElement(children, { onLogin: handleLogin })}
-    </Layout>
-  );
-};
-
-function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/login" element={<Login />} />
+        <Route path="/login" element={<Login onLogin={handleLogin} />} />
         <Route path="/create" element={<Create />} />
         <Route
           path="/monitoring"
           element={
-            <ProtectedRoute>
+            <ProtectedRoute isAuthenticated={isAuthenticated} onLogout={handleLogout}>
               <Monitoring />
             </ProtectedRoute>
           }
@@ -56,7 +53,7 @@ function App() {
         <Route
           path="/board-management"
           element={
-            <ProtectedRoute>
+            <ProtectedRoute isAuthenticated={isAuthenticated} onLogout={handleLogout}>
               <BoardManagement />
             </ProtectedRoute>
           }
