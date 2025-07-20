@@ -20,7 +20,7 @@ export default function Navbar({ onLogout }: { onLogout?: () => void }) {
     <nav className="navbar navbar-expand-lg navbar-light bg-custom">
       <div className="container-fluid">
         <Link className="navbar-brand fw-bold text-white" to="/monitoring">
-          Smart Watering
+          RakTonmai
         </Link>
         <button
           className="navbar-toggler"
@@ -38,12 +38,12 @@ export default function Navbar({ onLogout }: { onLogout?: () => void }) {
           <ul className="navbar-nav mx-auto mb-2 mb-lg-0 navbar-center">
             <li className="nav-item">
               <Link className="nav-link fw-bold" to="/monitoring">
-                Monitoring
+                แสดงข้อมูลการรดน้ำ
               </Link>
             </li>
             <li className="nav-item">
               <Link className="nav-link fw-bold" to="/board-management">
-                Manage
+                จัดการบอร์ดในระบบ
               </Link>
             </li>
           </ul>
@@ -55,7 +55,7 @@ export default function Navbar({ onLogout }: { onLogout?: () => void }) {
             </li>
             <li className="nav-item">
               <button className="nav-link fw-bold btn-logout" onClick={handleLogout}>
-                Logout
+                ออกจากระบบ
               </button>
             </li>
           </ul>

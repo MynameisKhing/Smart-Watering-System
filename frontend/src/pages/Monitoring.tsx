@@ -14,15 +14,15 @@ export default function Monitoring() {
   ];
 
   const mockBoards = [
-    { id: "Board 1", moisture: "45%" },
-    { id: "Board 2", moisture: "50%" },
-    { id: "Board 3", moisture: "40%" },
+    { id: "คะน้า", moisture: "45%" },
+    { id: "ผักกาดขาว", moisture: "50%" },
+    { id: "พริกขี้หนู", moisture: "40%" },
   ];
 
   const [valves, setValves] = useState([
-    { id: "Valve 1", status: "ON" },
-    { id: "Valve 2", status: "OFF" },
-    { id: "Valve 3", status: "OFF" },
+    { id: "คะน้า", status: "ON" },
+    { id: "ผักกาดขาว", status: "OFF" },
+    { id: "พริกขี้หนู", status: "OFF" },
   ]);
 
   const [currentTime, setCurrentTime] = useState(new Date());
@@ -49,7 +49,7 @@ export default function Monitoring() {
   return (
     <div className="monitoring-container">
       <div className="dashboard-header">
-        <h1>Monitoring Dashboard</h1>
+        <h1>ข้อมูลการใช้น้ำ</h1>
         <span className="dashboard-time">
           {currentTime.toLocaleTimeString('th-TH', { timeZone: 'Asia/Bangkok' })} +07, {currentTime.toLocaleDateString('th-TH', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
         </span>
@@ -57,7 +57,7 @@ export default function Monitoring() {
       <div className="monitoring-grid">
         <div className="card graph-section">
           <div className="card-header">
-            <h2>Water Usage <i className="fas fa-chart-line"></i></h2>
+            <h2>ปริมาณน้ำที่ใช้ <i className="fas fa-chart-line"></i></h2>
           </div>
           <ResponsiveContainer width="100%" height={300}>
             <LineChart data={waterUsageData}>
@@ -72,13 +72,13 @@ export default function Monitoring() {
 
         <div className="card moisture-section">
           <div className="card-header">
-            <h2>Soil Moisture <i className="fas fa-leaf"></i></h2>
+            <h2>ความชื้นในดิน <i className="fas fa-leaf"></i></h2>
           </div>
           <table>
             <thead>
               <tr>
-                <th>Board</th>
-                <th>Moisture</th>
+                <th>ชื่อบอร์ด</th>
+                <th>ค่าความชื้น</th>
               </tr>
             </thead>
             <tbody>
@@ -94,14 +94,14 @@ export default function Monitoring() {
 
         <div className="card valve-section">
           <div className="card-header">
-            <h2>Valve Control <i className="fas fa-cog"></i></h2>
+            <h2>ควบคุมการจ่ายน้ำ <i className="fas fa-cog"></i></h2>
           </div>
           <table>
             <thead>
               <tr>
-                <th>Valve</th>
-                <th>Status</th>
-                <th>Action</th>
+                <th>วาล์ว</th>
+                <th>สถานะ</th>
+                <th>ควบคุมการทำงาน</th>
               </tr>
             </thead>
             <tbody>
@@ -115,7 +115,7 @@ export default function Monitoring() {
                   </td>
                   <td>
                     <button onClick={() => toggleValve(idx)}>
-                      Toggle
+                      เปิด / ปิด
                     </button>
                   </td>
                 </tr>
