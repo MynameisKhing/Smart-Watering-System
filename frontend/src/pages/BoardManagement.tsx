@@ -10,8 +10,10 @@ type Board = {
     time: string;
     duration: number;
     days: string[];
+    active: boolean;
+    updateMode: "immediate" | "scheduled";
+    updateAt?: string;
   };
-  pendingUpdateAt?: string;
 };
 
 const DAYS = ["จันทร์", "อังคาร", "พุธ", "พฤหัสบดี", "ศุกร์", "เสาร์", "อาทิตย์"];
@@ -27,7 +29,16 @@ export default function BoardManagement() {
     duration: number;
     days: string[];
     active: boolean;
-  }>({ time: "22:00", duration: 15, days: [], active: true });
+    updateMode: "immediate" | "scheduled";
+    updateAt: string;
+  }>({
+    time: "22:00",
+    duration: 15,
+    days: [],
+    active: true,
+    updateMode: "immediate",
+    updateAt: "23:00",
+  });
 
   const networks = ["WiFi", "LoRa", "4G"];
 
@@ -53,24 +64,40 @@ export default function BoardManagement() {
   const toggleDay = (day: string) => {
     setTempSchedule(prev => ({
       ...prev,
-      days: prev.days.includes(day)
-        ? prev.days.filter(d => d !== day)
-        : [...prev.days, day],
+      days: prev.days.includes(day) ? prev.days.filter(d => d !== day) : [...prev.days, day],
     }));
   };
 
   const handleOpenSchedule = (board: Board) => {
     setSelectedBoardId(board.id);
+    const s = board.schedule;
     setTempSchedule(
-      board.schedule
-        ? { ...board.schedule, active: true }
-        : { time: "22:00", duration: 15, days: [], active: true }
+      s
+        ? {
+            time: s.time ?? "22:00",
+            duration: s.duration ?? 15,
+            days: s.days ?? [],
+            active: s.active ?? true,
+            updateMode: s.updateMode ?? "immediate",
+            updateAt: s.updateAt ?? "23:00",
+          }
+        : {
+            time: "22:00",
+            duration: 15,
+            days: [],
+            active: true,
+            updateMode: "immediate",
+            updateAt: "23:00",
+          }
     );
   };
 
   const handleSaveSchedule = (boardId: string) => {
     setBoards(boards.map(b =>
-      b.id === boardId ? { ...b, schedule: { ...tempSchedule, active: tempSchedule.active } } : b
+      b.id === boardId ? {
+        ...b,
+        schedule: { ...tempSchedule },
+      } : b
     ));
     setSelectedBoardId(null);
   };
@@ -122,23 +149,11 @@ export default function BoardManagement() {
                   </select>
                 </td>
                 <td>
-                  <button
-                    className="btn-add"
-                    onClick={() => handleOpenSchedule(board)}
-                  >
-                    ตั้งเวลา
-                  </button>
-                  <button
-                    className="btn-add"
-                    onClick={() => alert(`การตั้งค่าของ ${board.name}: ${board.schedule ? JSON.stringify(board.schedule) : "ยังไม่ได้ตั้งค่า"}`)}
-                  >
-                    รายละเอียด
-                  </button>
+                  <button className="btn-add" onClick={() => handleOpenSchedule(board)}>ตั้งเวลา</button>
+                  <button className="btn-add" onClick={() => alert(`การตั้งค่าของ ${board.name}: ${board.schedule ? JSON.stringify(board.schedule) : "ยังไม่ได้ตั้งค่า"}`)}>รายละเอียด</button>
                 </td>
                 <td>
-                  <button className="btn-delete" onClick={() => removeBoard(board.id)}>
-                    ลบ
-                  </button>
+                  <button className="btn-delete" onClick={() => removeBoard(board.id)}>ลบ</button>
                 </td>
               </tr>
               {selectedBoardId === board.id && (
@@ -148,11 +163,6 @@ export default function BoardManagement() {
                       <h3 className="schedule-title">กำหนดการให้น้ำสำหรับ {board.name}</h3>
                       <div className="schedule-form-group">
                         <label>
-                          <input
-                            type="checkbox"
-                            checked={tempSchedule.active}
-                            onChange={e => setTempSchedule({ ...tempSchedule, active: e.target.checked })}
-                          />
                           เวลา:
                           <input
                             type="time"
@@ -182,19 +192,47 @@ export default function BoardManagement() {
                           </label>
                         ))}
                       </div>
+                      <div className="schedule-form-group schedule-update-options">
+                        <label>
+                          <input
+                            type="radio"
+                            name="updateMode"
+                            checked={tempSchedule.updateMode === "immediate"}
+                            onChange={() => setTempSchedule({ ...tempSchedule, updateMode: "immediate" })}
+                          />
+                          อัปเดตทันที
+                        </label>
+                        <label>
+                          <input
+                            type="radio"
+                            name="updateMode"
+                            checked={tempSchedule.updateMode === "scheduled"}
+                            onChange={() =>
+                              setTempSchedule({
+                                ...tempSchedule,
+                                updateMode: "scheduled",
+                                updateAt: tempSchedule.updateAt ?? "23:00",
+                              })
+                            }
+                          />
+                          อัปเดตตามเวลา
+                        </label>
+                        {tempSchedule.updateMode === "scheduled" && (
+                          <label className="update-time">
+                            เวลาอัปเดต:
+                            <input
+                              type="time"
+                              value={tempSchedule.updateAt}
+                              onChange={e =>
+                                setTempSchedule({ ...tempSchedule, updateAt: e.target.value })
+                              }
+                            />
+                          </label>
+                        )}
+                      </div>
                       <div className="schedule-form-actions">
-                        <button
-                          className="btn-save"
-                          onClick={() => handleSaveSchedule(board.id)}
-                        >
-                          บันทึก
-                        </button>
-                        <button
-                          className="btn-cancel"
-                          onClick={handleCancelSchedule}
-                        >
-                          ยกเลิก
-                        </button>
+                        <button className="btn-save" onClick={() => handleSaveSchedule(board.id)}>บันทึก</button>
+                        <button className="btn-cancel" onClick={handleCancelSchedule}>ยกเลิก</button>
                       </div>
                     </div>
                   </td>
@@ -204,9 +242,7 @@ export default function BoardManagement() {
           ))}
         </tbody>
       </table>
-      <button className="btn-add" onClick={addBoard}>
-        เพิ่มบอร์ดใหม่
-      </button>
+      <button className="btn-add" onClick={addBoard}>เพิ่มบอร์ดใหม่</button>
     </div>
   );
 }

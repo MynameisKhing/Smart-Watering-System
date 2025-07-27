@@ -377,8 +377,48 @@
   }
 }
 
+.schedule-update-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  align-items: center;
+  justify-content: center;
+}
+
+.schedule-update-options label {
+  display: flex;
+  align-items: center;
+  font-size: 0.875rem;
+  color: #1f2937;
+  gap: 0.5rem;
+}
+
+.schedule-update-options .update-time input[type="time"] {
+  margin-left: 0.5rem;
+}
+
 @media (min-width: 769px) {
   .board-management table {
     display: table;
   }
+}
+
+.schedule-update-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  align-items: center;
+  justify-content: center;
+}
+
+.schedule-update-options label {
+  display: flex;
+  align-items: center;
+  font-size: 0.875rem;
+  color: #1f2937;
+  gap: 0.5rem;
+}
+
+.schedule-update-options .update-time input[type="time"] {
+  margin-left: 0.5rem;
 }
