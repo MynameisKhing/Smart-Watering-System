@@ -4,8 +4,7 @@ from database import get_db_connection
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 
-class User(BaseModel):
-    name: str
+class RegisterRequest(BaseModel):
     email: str
     password: str
 
@@ -14,16 +13,19 @@ class LoginRequest(BaseModel):
     password: str
 
 @router.post("/register")
-def register(user: User):
+def register(data: RegisterRequest):
     conn = get_db_connection()
-    cursor = conn.cursor()
-
-    cursor.execute("SELECT * FROM users WHERE email = ?", user.email)
-    if cursor.fetchone():
+    cur = conn.cursor()
+    # ตรวจสอบ email ซ้ำ
+    cur.execute("SELECT 1 FROM users WHERE email = ?", data.email)
+    if cur.fetchone():
+        conn.close()
         raise HTTPException(status_code=400, detail="Email already exists")
-
-    cursor.execute("INSERT INTO users (name, email, password) VALUES (?, ?, ?)",
-                   user.name, user.email, user.password)
+    # บันทึกผู้ใช้ใหม่
+    cur.execute(
+        "INSERT INTO users (email, password) VALUES (?, ?)",
+        data.email, data.password
+    )
     conn.commit()
     conn.close()
     return {"message": "User registered successfully"}
@@ -31,11 +33,14 @@ def register(user: User):
 @router.post("/login")
 def login(data: LoginRequest):
     conn = get_db_connection()
-    cursor = conn.cursor()
-    cursor.execute("SELECT * FROM users WHERE email = ? AND password = ?", data.email, data.password)
-    user = cursor.fetchone()
+    cur = conn.cursor()
+    # ตรวจสอบ credential
+    cur.execute(
+        "SELECT id FROM users WHERE email = ? AND password = ?",
+        data.email, data.password
+    )
+    user = cur.fetchone()
     conn.close()
-
-    if user:
-        return {"message": "Login success"}
-    raise HTTPException(status_code=401, detail="Invalid credentials")
+    if not user:
+        raise HTTPException(status_code=401, detail="Invalid credentials")
+    return {"message": "Login success"}

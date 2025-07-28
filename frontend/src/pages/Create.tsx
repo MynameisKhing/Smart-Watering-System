@@ -20,24 +20,19 @@ export default function Create() {
     }
 
     try {
-      const response = await fetch("http://localhost:8000/auth/register", {
+      const res = await fetch("http://localhost:8000/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name: email.split('@')[0],
-          email,
-          password
-        })
+        body: JSON.stringify({ email, password })
       });
-
-      if (response.ok) {
+      if (res.ok) {
         alert("ลงทะเบียนสำเร็จ");
         navigate("/login");
       } else {
-        const result = await response.json();
-        alert(result.detail || "เกิดข้อผิดพลาดในการลงทะเบียน");
+        const { detail } = await res.json();
+        alert(detail || "เกิดข้อผิดพลาดในการลงทะเบียน");
       }
-    } catch (error) {
+    } catch {
       alert("ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้");
     }
   };
@@ -46,8 +41,7 @@ export default function Create() {
     <div className="create-page">
       <div className="create-container">
         <h1 className="create-title">สร้างบัญชี</h1>
-        <p className="create-subtitle">กรุณากรอกข้อมูลเพื่อลงทะเบียน</p>
-
+        <p className="create-subtitle">กรุณากรอกอีเมลและรหัสผ่านเพื่อสมัคร</p>
         <form className="create-form" onSubmit={handleSubmit}>
           <input
             type="email"
@@ -70,12 +64,10 @@ export default function Create() {
             value={confirm}
             onChange={e => setConfirm(e.target.value)}
           />
-
           <button type="submit" className="create-button">
             ลงทะเบียน
           </button>
         </form>
-
         <div className="create-footer">
           <span>มีบัญชีอยู่แล้ว?</span>
           <Link to="/login" className="create-link">เข้าสู่ระบบ</Link>
