@@ -1,31 +1,32 @@
 import { useState, useEffect } from "react";
+import axios from "axios";
 import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer
 } from "recharts";
 import "./Monitoring.css";
 
 export default function Monitoring() {
-  const waterUsageData = [
+  const [waterUsageData, setWaterUsageData] = useState([
     { time: "08:00", value: 10 },
     { time: "09:00", value: 20 },
     { time: "10:00", value: 30 },
     { time: "11:00", value: 25 },
     { time: "12:00", value: 40 },
-  ];
-
-  const mockBoards = [
-    { id: "คะน้า", moisture: "45%" },
-    { id: "ผักกาดขาว", moisture: "50%" },
-    { id: "พริกขี้หนู", moisture: "40%" },
-  ];
-
-  const [valves, setValves] = useState([
-    { id: "คะน้า", status: "ON" },
-    { id: "ผักกาดขาว", status: "OFF" },
-    { id: "พริกขี้หนู", status: "OFF" },
   ]);
 
+  const [moistureBoards, setMoistureBoards] = useState<{ id: string; moisture: string }[]>([]);
+  const [valves, setValves] = useState<{ id: string; status: string }[]>([]);
   const [currentTime, setCurrentTime] = useState(new Date());
+
+  useEffect(() => {
+    axios.get("http://localhost:8000/monitoring")
+      .then(res => {
+        const data = res.data.records;
+        setMoistureBoards(data.map((d: any) => ({ id: d.fields.id, moisture: d.fields.moisture + "%" })));
+        setValves(data.map((d: any) => ({ id: d.fields.id, status: d.fields.valveStatus })));
+      })
+      .catch(err => console.error("โหลดข้อมูล monitoring ล้มเหลว", err));
+  }, []);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -82,7 +83,7 @@ export default function Monitoring() {
               </tr>
             </thead>
             <tbody>
-              {mockBoards.map(board => (
+              {moistureBoards.map(board => (
                 <tr key={board.id}>
                   <td>{board.id}</td>
                   <td>{board.moisture}</td>

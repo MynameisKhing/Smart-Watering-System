@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./BoardManagement.css";
+import axios from "axios";
 
 type Board = {
   id: string;
@@ -19,10 +20,7 @@ type Board = {
 const DAYS = ["จันทร์", "อังคาร", "พุธ", "พฤหัสบดี", "ศุกร์", "เสาร์", "อาทิตย์"];
 
 export default function BoardManagement() {
-  const [boards, setBoards] = useState<Board[]>([
-    { id: "ESP123456", name: "บอร์ด 1", status: "online", network: "WiFi" },
-    { id: "ESP789012", name: "บอร์ด 2", status: "offline", network: "-" },
-  ]);
+  const [boards, setBoards] = useState<Board[]>([]);
   const [selectedBoardId, setSelectedBoardId] = useState<string | null>(null);
   const [tempSchedule, setTempSchedule] = useState<{
     time: string;
@@ -41,6 +39,28 @@ export default function BoardManagement() {
   });
 
   const networks = ["WiFi", "LoRa", "4G"];
+
+  useEffect(() => {
+    axios.get("http://localhost:8000/boards")
+      .then(res => {
+        const gristBoards = res.data.records.map((r: any) => ({
+          id: r.fields.id,
+          name: r.fields.name,
+          status: r.fields.status,
+          network: r.fields.network,
+          schedule: {
+            time: r.fields.scheduleTime ?? "22:00",
+            duration: r.fields.duration ?? 15,
+            days: r.fields.days?.split(",") ?? [],
+            active: true,
+            updateMode: r.fields.updateMode ?? "immediate",
+            updateAt: r.fields.updateAt ?? "23:00",
+          }
+        }));
+        setBoards(gristBoards);
+      })
+      .catch(err => console.error("โหลดข้อมูลล้มเหลว:", err));
+  }, []);
 
   const addBoard = () => {
     const newBoard: Board = {
