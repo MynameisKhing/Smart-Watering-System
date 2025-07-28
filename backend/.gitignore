@@ -1,0 +1,34 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.log
+
+# Virtual environment
+venv/
+.env
+.env.*
+
+# VSCode settings
+.vscode/
+
+# FastAPI auto-generated files
+*.sqlite3
+*.db
+*.bak
+
+# Node / React
+node_modules/
+build/
+dist/
+*.lock
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# pyodbc temp files
+*.mdb
+*.accdb
+*.bak
+*.ldf
