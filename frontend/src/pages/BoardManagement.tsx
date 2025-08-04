@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import "./BoardManagement.css";
-import axios from "axios";
 
 // Type for scheduling info (optional)
 type Schedule = {
@@ -25,7 +24,12 @@ type Board = {
 const DAYS = ["จันทร์", "อังคาร", "พุธ", "พฤหัสบดี", "ศุกร์", "เสาร์", "อาทิตย์"];
 
 export default function BoardManagement() {
-  const [boards, setBoards] = useState<Board[]>([]);
+  const [boards, setBoards] = useState<Board[]>([
+    { id: 1, uid: "BOARD001", name: "ตะไคร้", status: "online", network: "WiFi", schedule: { time: "22:00", duration: 15, days: ["จันทร์", "พุธ"], active: true, updateMode: "immediate" } },
+    { id: 2, uid: "BOARD002", name: "มะเขือเทศ", status: "offline", network: "4G", schedule: { time: "23:00", duration: 20, days: ["อังคาร"], active: false, updateMode: "scheduled", updateAt: "00:00" } },
+    { id: 3, uid: "BOARD003", name: "ผักบุ้ง", status: "online", network: "LoRa", schedule: { time: "21:00", duration: 10, days: [], active: true, updateMode: "immediate" } },
+    { id: 3, uid: "BOARD004", name: "กล้วยหอม", status: "offline", network: "WiFi", schedule: { time: "21:00", duration: 10, days: [], active: true, updateMode: "immediate" } }
+  ]);
   const [selectedBoardId, setSelectedBoardId] = useState<number | null>(null);
   const [tempSchedule, setTempSchedule] = useState<Schedule>({
     time: "22:00",
@@ -38,12 +42,7 @@ export default function BoardManagement() {
 
   const networks = ["WiFi", "LoRa", "4G"];
 
-  // Fetch boards from backend on component mount
-  useEffect(() => {
-    axios.get<Board[]>("http://localhost:8000/boards")
-      .then(res => setBoards(res.data))
-      .catch(err => console.error("โหลดข้อมูลล้มเหลว:", err));
-  }, []);
+  // No useEffect for fetching data since we're using mock data
 
   const removeBoard = (id: number) => {
     setBoards(boards.filter(b => b.id !== id));
@@ -132,14 +131,23 @@ export default function BoardManagement() {
                   </select>
                 </td>
                 <td>
-                  <button className="btn-add" onClick={() => handleOpenSchedule(board)}>
-                    ตั้งเวลา
-                  </button>
-                  <button className="btn-add" onClick={() => alert(
-                    `การตั้งค่าของ ${board.name ?? board.uid}: ${board.schedule ? JSON.stringify(board.schedule) : "ยังไม่ได้ตั้งค่า"}`
-                  )}>
-                    รายละเอียด
-                  </button>
+                  <div className="button-group">
+                    <button className="btn-add" onClick={() => handleOpenSchedule(board)}>
+                      ตั้งเวลา
+                    </button>
+                    <button className="btn-add"
+                      onClick={() =>
+                        alert(
+                          `การตั้งค่าของ ${board.name ?? board.uid}:\n\n` +
+                          (board.schedule
+                          ? JSON.stringify(board.schedule, null, 2)
+                          : "ยังไม่ได้ตั้งค่า")
+                        )
+                      }
+                    >
+                      รายละเอียด
+                    </button>
+                  </div>
                 </td>
                 <td>
                   <button className="btn-delete" onClick={() => removeBoard(board.id)}>

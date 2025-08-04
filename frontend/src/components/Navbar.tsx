@@ -20,7 +20,7 @@ export default function Navbar({ onLogout }: { onLogout?: () => void }) {
     <nav className="navbar navbar-expand-lg navbar-light bg-custom">
       <div className="container-fluid">
         <Link className="navbar-brand fw-bold text-white" to="/monitoring">
-          RakTonmai
+          <i className="fas fa-leaf me-2"></i> RakTonmai
         </Link>
         <button
           className="navbar-toggler"

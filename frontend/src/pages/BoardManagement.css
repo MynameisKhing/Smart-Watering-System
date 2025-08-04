@@ -117,6 +117,7 @@
   cursor: pointer;
   transition: background-color 0.2s ease, transform 0.1s ease;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  gap: 1rem;
 }
 
 .btn-add:hover {
@@ -421,4 +422,10 @@
 
 .schedule-update-options .update-time input[type="time"] {
   margin-left: 0.5rem;
+}
+
+.button-group {
+  display: flex;
+  gap: 0.5rem; /* ปรับเป็น 1rem ถ้าต้องการเว้นห่างมากขึ้น */
+  flex-wrap: wrap;
 }
