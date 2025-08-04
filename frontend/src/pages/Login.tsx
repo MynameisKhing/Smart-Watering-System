@@ -3,21 +3,21 @@ import { useNavigate, Link } from 'react-router-dom';
 import './Login.css';
 
 export default function Login({ onLogin }: { onLogin?: () => void }) {
-  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!email || !password) {
-      alert('กรุณากรอกอีเมลและรหัสผ่าน');
+    if (!username || !password) {
+      alert('กรุณากรอกชื่อผู้ใช้และรหัสผ่าน');
       return;
     }
     try {
       const res = await fetch("http://localhost:8000/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password })
+        body: JSON.stringify({ username, password })
       });
       if (res.ok) {
         onLogin?.();
@@ -35,14 +35,14 @@ export default function Login({ onLogin }: { onLogin?: () => void }) {
     <div className="login-page">
       <div className="login-container">
         <h1 className="login-title">ยินดีต้อนรับ</h1>
-        <p className="login-subtitle">กรุณากรอกอีเมลและรหัสผ่านเพื่อเข้าสู่ระบบ</p>
+        <p className="login-subtitle">กรุณากรอกชื่อผู้ใช้และรหัสผ่านเพื่อเข้าสู่ระบบ</p>
         <form className="login-form" onSubmit={handleSubmit}>
           <input
-            type="email"
-            placeholder="อีเมล"
+            type="text"
+            placeholder="ชื่อผู้ใช้"
             className="login-input"
-            value={email}
-            onChange={e => setEmail(e.target.value)}
+            value={username}
+            onChange={e => setUsername(e.target.value)}
           />
           <input
             type="password"

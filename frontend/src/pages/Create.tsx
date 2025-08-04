@@ -3,14 +3,14 @@ import { useNavigate, Link } from 'react-router-dom';
 import './create.css';
 
 export default function Create() {
-  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [confirm, setConfirm] = useState('');
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!email || !password || !confirm) {
+    if (!username || !password || !confirm) {
       alert('กรุณากรอกข้อมูลให้ครบทุกช่อง');
       return;
     }
@@ -23,7 +23,7 @@ export default function Create() {
       const res = await fetch("http://localhost:8000/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password })
+        body: JSON.stringify({ username, password })
       });
       if (res.ok) {
         alert("ลงทะเบียนสำเร็จ");
@@ -41,14 +41,14 @@ export default function Create() {
     <div className="create-page">
       <div className="create-container">
         <h1 className="create-title">สร้างบัญชี</h1>
-        <p className="create-subtitle">กรุณากรอกอีเมลและรหัสผ่านเพื่อสมัคร</p>
+        <p className="create-subtitle">กรุณากรอกชื่อผู้ใช้และรหัสผ่านเพื่อสมัคร</p>
         <form className="create-form" onSubmit={handleSubmit}>
           <input
-            type="email"
-            placeholder="อีเมล"
+            type="text"
+            placeholder="ชื่อผู้ใช้"
             className="create-input"
-            value={email}
-            onChange={e => setEmail(e.target.value)}
+            value={username}
+            onChange={e => setUsername(e.target.value)}
           />
           <input
             type="password"

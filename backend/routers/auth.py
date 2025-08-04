@@ -5,26 +5,24 @@ from database import get_db_connection
 router = APIRouter(prefix="/auth", tags=["auth"])
 
 class RegisterRequest(BaseModel):
-    email: str
+    username: str
     password: str
 
 class LoginRequest(BaseModel):
-    email: str
+    username: str
     password: str
 
 @router.post("/register")
 def register(data: RegisterRequest):
     conn = get_db_connection()
     cur = conn.cursor()
-    # ตรวจสอบ email ซ้ำ
-    cur.execute("SELECT 1 FROM users WHERE email = ?", data.email)
+    cur.execute("SELECT 1 FROM users WHERE username = ?", data.username)
     if cur.fetchone():
         conn.close()
-        raise HTTPException(status_code=400, detail="Email already exists")
-    # บันทึกผู้ใช้ใหม่
+        raise HTTPException(status_code=400, detail="Username already exists")
     cur.execute(
-        "INSERT INTO users (email, password) VALUES (?, ?)",
-        data.email, data.password
+        "INSERT INTO users (username, password) VALUES (?, ?)",
+        data.username, data.password
     )
     conn.commit()
     conn.close()
@@ -34,10 +32,9 @@ def register(data: RegisterRequest):
 def login(data: LoginRequest):
     conn = get_db_connection()
     cur = conn.cursor()
-    # ตรวจสอบ credential
     cur.execute(
-        "SELECT id FROM users WHERE email = ? AND password = ?",
-        data.email, data.password
+        "SELECT id FROM users WHERE username = ? AND password = ?",
+        data.username, data.password
     )
     user = cur.fetchone()
     conn.close()
