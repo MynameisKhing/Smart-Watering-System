@@ -28,7 +28,7 @@ export default function BoardManagement() {
     { id: 1, uid: "BOARD001", name: "ตะไคร้", status: "online", network: "WiFi", schedule: { time: "22:00", duration: 15, days: ["จันทร์", "พุธ"], active: true, updateMode: "immediate" } },
     { id: 2, uid: "BOARD002", name: "มะเขือเทศ", status: "offline", network: "4G", schedule: { time: "23:00", duration: 20, days: ["อังคาร"], active: false, updateMode: "scheduled", updateAt: "00:00" } },
     { id: 3, uid: "BOARD003", name: "ผักบุ้ง", status: "online", network: "LoRa", schedule: { time: "21:00", duration: 10, days: [], active: true, updateMode: "immediate" } },
-    { id: 3, uid: "BOARD004", name: "กล้วยหอม", status: "offline", network: "WiFi", schedule: { time: "21:00", duration: 10, days: [], active: true, updateMode: "immediate" } }
+    { id: 4, uid: "BOARD004", name: "กล้วยหอม", status: "offline", network: "WiFi", schedule: { time: "21:00", duration: 10, days: [], active: true, updateMode: "immediate" } }
   ]);
   const [selectedBoardId, setSelectedBoardId] = useState<number | null>(null);
   const [tempSchedule, setTempSchedule] = useState<Schedule>({

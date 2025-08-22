@@ -1,3 +1,4 @@
+# routers/auth.py
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 from database import get_db_connection
@@ -18,18 +19,18 @@ def register(data: RegisterRequest):
     conn = get_db_connection()
     cur = conn.cursor()
 
-    # ตรวจสอบชื่อซ้ำ
+    # ตรวจซ้ำ username
     cur.execute("SELECT 1 FROM users WHERE username = ?", data.username)
     if cur.fetchone():
         conn.close()
         raise HTTPException(status_code=400, detail="Username already exists")
 
-    # แฮชรหัสผ่านก่อนเก็บ
-    hashed_pw = bcrypt.hashpw(data.password.encode('utf-8'), bcrypt.gensalt())
+    # แฮชรหัสผ่านก่อนบันทึก
+    pw_hash = bcrypt.hashpw(data.password.encode("utf-8"), bcrypt.gensalt()).decode("utf-8")
 
     cur.execute(
-        "INSERT INTO users (username, password) VALUES (?, ?)",
-        data.username, hashed_pw
+        "INSERT INTO users (username, password_hash) VALUES (?, ?)",
+        data.username, pw_hash
     )
     conn.commit()
     conn.close()
@@ -40,16 +41,16 @@ def login(data: LoginRequest):
     conn = get_db_connection()
     cur = conn.cursor()
 
-    # ดึง password ที่ถูก hash มาเปรียบเทียบ
-    cur.execute("SELECT id, password FROM users WHERE username = ?", data.username)
+    cur.execute("SELECT id, password_hash FROM users WHERE username = ?", data.username)
     row = cur.fetchone()
     conn.close()
 
     if not row:
         raise HTTPException(status_code=401, detail="Invalid credentials")
 
-    stored_hashed_password = row[1]
-    if not bcrypt.checkpw(data.password.encode('utf-8'), stored_hashed_password):
+    _, stored_hash = row
+    ok = bcrypt.checkpw(data.password.encode("utf-8"), stored_hash.encode("utf-8"))
+    if not ok:
         raise HTTPException(status_code=401, detail="Invalid credentials")
 
     return {"message": "Login success"}

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import './create.css';
+import '../style/Create.css';
 
 export default function Create() {
   const [username, setUsername] = useState('');

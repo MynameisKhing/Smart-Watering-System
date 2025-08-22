@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer
 } from "recharts";
-import "./Monitoring.css";
+import "../style/Monitoring.css";
 
 export default function Monitoring() {
   const [waterUsageData, setWaterUsageData] = useState([
@@ -12,6 +12,13 @@ export default function Monitoring() {
     { time: "10:00", zone1: 32, zone2: 15, zone3: 21, zone4: 30 },
     { time: "11:00", zone1: 25, zone2: 12, zone3: 18, zone4: 22 },
     { time: "12:00", zone1: 40, zone2: 20, zone3: 25, zone4: 35 },
+    { time: "13:00", zone1: 20, zone2: 10, zone3: 35, zone4: 55 },
+    { time: "14:00", zone1: 50, zone2: 30, zone3: 35, zone4: 40 },
+    { time: "15:00", zone1: 30, zone2: 20, zone3: 20, zone4: 12 },
+    { time: "16:00", zone1: 50, zone2: 30, zone3: 15, zone4: 40 },
+    { time: "17:00", zone1: 15, zone2: 10, zone3: 18, zone4: 23 },
+    { time: "18:00", zone1: 40, zone2: 20, zone3: 25, zone4: 35 },
+
   ]);
 
   const [moistureBoards, setMoistureBoards] = useState([
@@ -141,7 +148,7 @@ export default function Monitoring() {
         </div>
         <div className="card valve-section">
           <div className="card-header">
-            <h2>ค่าน้ำภายในบ่อเก็บน้ำ <i className="fas fa-cog"></i></h2>
+            <h2>น้ำภายในบ่อเก็บน้ำ <i className="fas fa-cog"></i></h2>
           </div>
           <table>
             <thead>
