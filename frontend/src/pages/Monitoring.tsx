@@ -1,175 +1,79 @@
 import { useState, useEffect } from "react";
-//import axios from "axios"; // Kept for potential future use
-import {
-  LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer
-} from "recharts";
+import axios from "axios";
 import "../style/Monitoring.css";
 
+type SensorData = {
+  board: string;
+  temperature: number;
+  ph: number;
+  tds: number;
+  soilMoisture: number;
+};
+
 export default function Monitoring() {
-  const [waterUsageData, setWaterUsageData] = useState([
-    { time: "08:00", zone1: 10, zone2: 5, zone3: 8, zone4: 12 },
-    { time: "09:00", zone1: 20, zone2: 10, zone3: 15, zone4: 18 },
-    { time: "10:00", zone1: 32, zone2: 15, zone3: 21, zone4: 30 },
-    { time: "11:00", zone1: 25, zone2: 12, zone3: 18, zone4: 22 },
-    { time: "12:00", zone1: 40, zone2: 20, zone3: 25, zone4: 35 },
-    { time: "13:00", zone1: 20, zone2: 10, zone3: 35, zone4: 55 },
-    { time: "14:00", zone1: 50, zone2: 30, zone3: 35, zone4: 40 },
-    { time: "15:00", zone1: 30, zone2: 20, zone3: 20, zone4: 12 },
-    { time: "16:00", zone1: 50, zone2: 30, zone3: 15, zone4: 40 },
-    { time: "17:00", zone1: 15, zone2: 10, zone3: 18, zone4: 23 },
-    { time: "18:00", zone1: 40, zone2: 20, zone3: 25, zone4: 35 },
-
-  ]);
-
-  const [moistureBoards, setMoistureBoards] = useState([
-    { id: "ตะไคร้", moisture: "32%" },
-    { id: "มะเขือเทศ", moisture: "15%" },
-    { id: "ผักบุ้ง", moisture: "21%" },
-    { id: "กล้วยหอม", moisture: "30%" },
-  ]);
-  const [valves, setValves] = useState([
-    { id: "ตะไคร้", status: "ON" },
-    { id: "มะเขือเทศ", status: "OFF" },
-    { id: "ผักบุ้ง", status: "ON" },
-    { id: "กล้วยหอม", status: "OFF" },
-  ]);
+  const [data, setData] = useState<SensorData | null>(null);
   const [currentTime, setCurrentTime] = useState(new Date());
-  const [temperature, setTemperature] = useState(25.5);
-  const [pH, setPH] = useState(7.2);
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentTime(new Date());
-    }, 1000);
+    const timer = setInterval(() => setCurrentTime(new Date()), 1000);
     return () => clearInterval(timer);
   }, []);
 
-  // Randomize moisture, temperature, and pH every 5 seconds
   useEffect(() => {
-    const interval = setInterval(() => {
-      setMoistureBoards(prevBoards =>
-        prevBoards.map(board => ({
-          ...board,
-          moisture: `${Math.min(100, Math.max(0, Math.round(Math.random() * 100)))}%`,
-        }))
-      );
-      setTemperature(prev => Math.min(30, Math.max(20, prev + (Math.random() - 0.5) * 2)));
-      setPH(prev => Math.min(8, Math.max(6, prev + (Math.random() - 0.5) * 0.5)));
-    }, 5000); // Update every 5 seconds
+    const fetchData = () => {
+      axios
+        .get("http://localhost:8000/sensors")
+        .then((res) => setData(res.data))
+        .catch((err) =>
+          console.error("โหลดข้อมูล monitoring ล้มเหลว", err)
+        );
+    };
+
+    fetchData();
+    const interval = setInterval(fetchData, 5000);
     return () => clearInterval(interval);
   }, []);
-
-  // Placeholder to use setWaterUsageData and setMoistureBoards at least once
-  useEffect(() => {
-    // Commenting out axios call as it's not currently needed for mock data
-    // axios.get("http://localhost:8000/monitoring")
-    //   .then(res => {
-    //     const data = res.data.records;
-    //     setMoistureBoards(data.map((d: any) => ({ id: d.fields.id, moisture: d.fields.moisture + "%" })));
-    //     setValves(data.map((d: any) => ({ id: d.fields.id, status: d.fields.valveStatus })));
-    //   })
-    //   .catch(err => console.error("โหลดข้อมูล monitoring ล้มเหลว", err));
-  }, []);
-
-  // Calculate total water usage for each time point
-  const totalWaterUsageData = waterUsageData.map(data => ({
-    time: data.time,
-    total: data.zone1 + data.zone2 + data.zone3 + data.zone4,
-  }));
 
   return (
     <div className="monitoring-container">
       <div className="dashboard-header">
-        <h1>ข้อมูลการใช้น้ำ</h1>
+        <h1>ข้อมูลเซนเซอร์ที่ได้จาก {data?.board ?? "กำลังโหลด..."}</h1>
         <span className="dashboard-time">
-          {currentTime.toLocaleDateString('th-TH', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
+          {currentTime.toLocaleDateString("th-TH", {
+            weekday: "long",
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          })}{" "}
+          {currentTime.toLocaleTimeString("th-TH")}
         </span>
       </div>
-      <div className="monitoring-grid">
-        <div className="card graph-section" style={{ gridColumn: "span 3" }}>
-          <div className="card-header">
-            <h2>ปริมาณน้ำที่ใช้ (ลิตร) <i className="fas fa-chart-line"></i></h2>
+
+      {data ? (
+        <div className="monitoring-grid">
+          <div className="card sensor-card temp">
+            <h2>อุณหภูมิของน้ำ (°C)</h2>
+            <p className="sensor-value">{data.temperature.toFixed(1)} </p>
           </div>
-          <ResponsiveContainer width="100%" height={300}>
-            <LineChart data={totalWaterUsageData}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-              <XAxis dataKey="time" stroke="#6b7280" />
-              <YAxis stroke="#6b7280" />
-              <Tooltip contentStyle={{ background: '#ffffff', borderRadius: '6px', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }} />
-              <Line type="monotone" dataKey="total" stroke="#228cc5ff" strokeWidth={2} name="ปริมาณน้ำที่ใช้" activeDot={{ r: 8 }} />
-            </LineChart>
-          </ResponsiveContainer>
-        </div>
-        <div className="card moisture-section">
-          <div className="card-header">
-            <h2>ความชื้นภายในดิน <i className="fas fa-leaf"></i></h2>
+
+          <div className="card sensor-card ph">
+            <h2>ค่าความเป็นกรด-ด่างของน้ำ</h2>
+            <p className="sensor-value">{data.ph.toFixed(2)}</p>
           </div>
-          <table>
-            <thead>
-              <tr>
-                <th>ชื่อแปลง</th>
-                <th>ค่าความชื้น</th>
-              </tr>
-            </thead>
-            <tbody>
-              {moistureBoards.map(board => (
-                <tr key={board.id}>
-                  <td>{board.id}</td>
-                  <td>{board.moisture}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-        <div className="card valve-section">
-          <div className="card-header">
-            <h2>สถานะของวาล์ว <i className="fas fa-cog"></i></h2>
+
+          <div className="card sensor-card tds">
+            <h2>ค่าความขุ่นของน้ำ (ppm)</h2>
+            <p className="sensor-value">{data.tds}</p>
           </div>
-          <table>
-            <thead>
-              <tr>
-                <th>วาล์ว</th>
-                <th>สถานะ</th>
-              </tr>
-            </thead>
-            <tbody>
-              {valves.map((valve) => (
-                <tr key={valve.id}>
-                  <td>{valve.id}</td>
-                  <td>
-                    <span className={`status ${valve.status.toLowerCase()}`}>
-                      {valve.status}
-                    </span>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-        <div className="card valve-section">
-          <div className="card-header">
-            <h2>น้ำภายในบ่อเก็บน้ำ <i className="fas fa-cog"></i></h2>
+
+          <div className="card sensor-card soil">
+            <h2>ค่าความชื้นในดิน (%)</h2>
+            <p className="sensor-value">{data.soilMoisture}</p>
           </div>
-          <table>
-            <thead>
-              <tr>
-                <th>พารามิเตอร์</th>
-                <th>ค่า</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>อุณหภูมิ (°C)</td>
-                <td>{temperature.toFixed(1)}</td>
-              </tr>
-              <tr>
-                <td>ค่าความเป็นกรด (pH)</td>
-                <td>{pH.toFixed(1)}</td>
-              </tr>
-            </tbody>
-          </table>
         </div>
-      </div>
+      ) : (
+        <p className="loading">กำลังโหลดข้อมูลจากบอร์ด...</p>
+      )}
     </div>
   );
 }
